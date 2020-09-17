@@ -18,7 +18,7 @@ def telegram_bot_sendtext(bot_message):
 
 
 
-body= {"topLevelTestCentreId":"CVD19","postcode":settings["postcode"],"testCentreGroupIds":["GR_RTS","GR_STS","GR_MTU"],"startDate": settings["startDate"],"numberOfDays":5,"appointmentTypeCode":"ATCOM05","paging":{"currentPage":1,"pageSize":3}}
+body= {"topLevelTestCentreId":"CVD19","postcode":settings["postcode"],"testCentreGroupIds":["GR_RTS","GR_STS","GR_MTU", "GR_LTS"],"startDate": settings["startDate"],"numberOfDays":5,"appointmentTypeCode":"ATCOM05","paging":{"currentPage":1,"pageSize":3}}
 
 
 encoded_body = json.dumps(body)
@@ -41,19 +41,22 @@ r = http.request('POST', 'https://ads-prd-gov-1-sp.test-for-coronavirus.service.
                  body=encoded_body)
 
 body=r.data.decode("utf-8")
-
+#print(body)
 json_body= json.loads(body)
 
+#print(json_body)
 
-for testCenter in json_body["testCentres"]:
-    distance =int(testCenter["geolocation"]["distance"])
-    testCenterName = testCenter["testCentre"]["displayName"]
-    
-    if distance<settings["maxDistance"]:
+if "testCentres" in json_body:
 
-        message = "Test available "+str(distance)+" miles, "+testCenterName 
-    
-        telegram_bot_sendtext(message)
+    for testCenter in json_body["testCentres"]:
+        distance =int(testCenter["geolocation"]["distance"])
+        testCenterName = testCenter["testCentre"]["displayName"]
+        
+        if distance<settings["maxDistance"]:
+
+            message = "Test available "+str(distance)+" miles, "+testCenterName 
+        
+            telegram_bot_sendtext(message)
 
 
 

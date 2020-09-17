@@ -49,12 +49,13 @@ json_body= json.loads(body)
 if "testCentres" in json_body:
 
     for testCenter in json_body["testCentres"]:
+        number = int(testCenter["availability"]["availableSlots"])
         distance =int(testCenter["geolocation"]["distance"])
         testCenterName = testCenter["testCentre"]["displayName"]
         
         if distance<settings["maxDistance"]:
 
-            message = "Test available "+str(distance)+" miles, "+testCenterName 
+            message = "There are "+str(number)+" tests available "+str(distance)+" miles, "+testCenterName 
         
             telegram_bot_sendtext(message)
 

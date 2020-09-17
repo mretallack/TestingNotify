@@ -18,7 +18,7 @@ def telegram_bot_sendtext(bot_message):
 
 
 
-body= {"topLevelTestCentreId":"CVD19","postcode":"BH20 6JF","testCentreGroupIds":["GR_RTS","GR_STS","GR_MTU"],"startDate":"2020-09-17T00:00:00","numberOfDays":5,"appointmentTypeCode":"ATCOM05","paging":{"currentPage":1,"pageSize":3}}
+body= {"topLevelTestCentreId":"CVD19","postcode":settings["postcode"],"testCentreGroupIds":["GR_RTS","GR_STS","GR_MTU"],"startDate": settings["startDate"],"numberOfDays":5,"appointmentTypeCode":"ATCOM05","paging":{"currentPage":1,"pageSize":3}}
 
 
 encoded_body = json.dumps(body)
@@ -27,14 +27,14 @@ headers={
         "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0",
         "Accept": "application/json, text/plain, */*",
         "Accept-Language": "en-GB,en;q=0.5",
-        "x-urlcode": "WI1DLV4Q5LXFTVV5",
+        "x-urlcode": settings["xurlcode"],
         "Content-Type": "application/json",
         "Pragma": "no-cache",
         "Cache-Control": "no-cache"
     }
 
 
-http = urllib3.PoolManager()
+http = urllib3.PoolManager(ca_certs="/etc/ssl/ca-bundle.pem")
 
 r = http.request('POST', 'https://ads-prd-gov-1-sp.test-for-coronavirus.service.gov.uk/testcentres/availabilityquery',
                  headers=headers,
